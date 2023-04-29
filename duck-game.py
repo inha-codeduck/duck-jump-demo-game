@@ -9,7 +9,7 @@ BLACK = (0, 0, 0)
 # 게임 요소 초기화
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Duck Game")
+pygame.display.set_caption("Inha Duck Game")
 clock = pygame.time.Clock()
 
 # 오리 클래스
@@ -66,6 +66,42 @@ class Scoreboard:
     def draw(self, screen, score):
         score_text = self.font.render(f"Score: {score}", True, BLACK)
         screen.blit(score_text, (10, 10))
+
+# 게임의 시작 화면을 표시합니다.
+def start_screen():
+    button_font = pygame.font.Font(None, 36)
+    title_font = pygame.font.Font(None, 60)
+    button_color = (100, 100, 255)
+    button_hover_color = (150, 150, 255)
+
+    title = title_font.render("Inha Duck Game", True, BLACK)
+    title_rect = title.get_rect(center=(WIDTH // 2, HEIGHT // 3))
+
+    button = button_font.render("Start", True, WHITE)
+    button_rect = button.get_rect(center=(WIDTH // 2, HEIGHT // 1.5))
+    button_bg_color = button_color
+
+    while True:
+        screen.fill(WHITE)
+        screen.blit(title, title_rect)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if button_rect.collidepoint(event.pos):
+                    return True
+            if event.type == pygame.MOUSEMOTION:
+                if button_rect.collidepoint(event.pos):
+                    button_bg_color = button_hover_color
+                else:
+                    button_bg_color = button_color
+
+        pygame.draw.rect(screen, button_bg_color, button_rect.inflate(10, 10))
+        screen.blit(button, button_rect)
+        pygame.display.update()
+        clock.tick(30)
 
 # 게임 오버 화면을 표시하고, 다시하기 버튼을 눌렀을 때 게임을 재시작합니다.
 def game_over_screen(score):
@@ -155,7 +191,9 @@ def game_loop():
     pygame.quit()
 
 if __name__ == "__main__":
-    while True:
-        play_again = game_loop()
-        if not play_again:
-            break
+    start_game = start_screen()
+    if start_game:
+        while True:
+            play_again = game_loop()
+            if not play_again:
+                break
