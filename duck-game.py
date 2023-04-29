@@ -17,6 +17,7 @@ class Duck(pygame.sprite.Sprite):
     def __init__(self, width, height):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("duck.png")  # 오리 이미지 파일 불러오기
+        self.image = pygame.transform.scale(self.image, (50, 50))  # 오리 크기 변경
         self.rect = self.image.get_rect()
         self.rect.x = width // 3
         self.rect.y = height - self.rect.height
