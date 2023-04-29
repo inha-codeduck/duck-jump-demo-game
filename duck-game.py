@@ -68,11 +68,11 @@ class Scoreboard:
 # 게임 루프
 def game_loop():
     running = True
-    jump = False
     game_speed = 10
     score = 0
     obstacles = pygame.sprite.Group()
     duck = Duck(WIDTH, HEIGHT)
+    score_board = Scoreboard()
 
     while running:
         clock.tick(30)
@@ -82,13 +82,32 @@ def game_loop():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    duck.jump()
 
-        # 코드 작성: 공룡 점프, 장애물 생성 및 충돌 처리, 게임 속도 및 점수 관리
+        # 오리 점프
+        duck.update(HEIGHT)
+
+        # 장애물 생성
+        if random.randint(0, 100) < 2:
+            obstacles.add(Obstacle(WIDTH, HEIGHT))
+
+        # 장애물 이동 및 충돌 처리
+        for obstacle in obstacles:
+            obstacle.update(game_speed)
+            if duck.rect.colliderect(obstacle.rect):
+                running = False
+
+        # 게임 속도 및 점수 관리
+        game_speed += 0.001
+        score += 1
 
         # 화면에 요소 그리기
         duck.draw(screen)
-        obstacles.draw(screen)
-        Scoreboard.draw(screen, score)
+        for obstacle in obstacles:
+            obstacle.draw(screen)
+        score_board.draw(screen, score)
 
         pygame.display.update()
 
