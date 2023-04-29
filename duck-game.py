@@ -45,6 +45,7 @@ class Obstacle(pygame.sprite.Sprite):
     def __init__(self, width, height):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("cactus.png")  # 장애물 이미지 파일 불러오기
+        self.image = pygame.transform.scale(self.image, (50, 50))  # 장애물 크기 변경
         self.rect = self.image.get_rect()
         self.rect.x = width
         self.rect.y = height - self.rect.height
