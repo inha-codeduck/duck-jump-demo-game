@@ -14,15 +14,56 @@ clock = pygame.time.Clock()
 
 # 오리 클래스
 class Duck(pygame.sprite.Sprite):
-    # 코드 작성
+    def __init__(self, width, height):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("duck.png")  # 오리 이미지 파일 불러오기
+        self.rect = self.image.get_rect()
+        self.rect.x = width // 3
+        self.rect.y = height - self.rect.height
+        self.jump_height = 0
+        self.is_jumping = False
+
+    def jump(self):
+        if not self.is_jumping:
+            self.is_jumping = True
+            self.jump_height = 15
+
+    def update(self, height):
+        if self.is_jumping:
+            self.rect.y -= self.jump_height
+            self.jump_height -= 1
+            if self.rect.y >= height - self.rect.height:
+                self.rect.y = height - self.rect.height
+                self.is_jumping = False
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
 # 장애물 클래스
 class Obstacle(pygame.sprite.Sprite):
-    # 코드 작성
+    def __init__(self, width, height):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("cactus.png")  # 장애물 이미지 파일 불러오기
+        self.rect = self.image.get_rect()
+        self.rect.x = width
+        self.rect.y = height - self.rect.height
+
+    def update(self, game_speed):
+        self.rect.x -= game_speed
+        if self.rect.x < -self.rect.width:
+            self.kill()
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
 # 점수판 클래스
-class Scoreboard():
-    # 코드 작성
+class Scoreboard:
+    def __init__(self):
+        self.font = pygame.font.Font(None, 36)
+
+    def draw(self, screen, score):
+        score_text = self.font.render(f"Score: {score}", True, BLACK)
+        screen.blit(score_text, (10, 10))
 
 # 게임 루프
 def game_loop():
