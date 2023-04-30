@@ -1,5 +1,7 @@
 import pygame
 import random
+import os
+import sys
 
 # 게임 화면 설정
 WIDTH, HEIGHT = 800, 300
@@ -16,7 +18,7 @@ clock = pygame.time.Clock()
 class Duck(pygame.sprite.Sprite):
     def __init__(self, width, height):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("duck.png")  # 오리 이미지 파일 불러오기
+        self.image = pygame.image.load(resource_path("duck.png"))  # 오리 이미지 파일 불러오기
         self.image = pygame.transform.scale(self.image, (50, 50))  # 오리 크기 변경
         self.rect = self.image.get_rect()
         self.rect.x = width // 3
@@ -44,7 +46,7 @@ class Duck(pygame.sprite.Sprite):
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, width, height):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("cactus.png")  # 장애물 이미지 파일 불러오기
+        self.image = pygame.image.load(resource_path("cactus.png"))  # 장애물 이미지 파일 불러오기
         self.image = pygame.transform.scale(self.image, (50, 50))  # 장애물 크기 변경
         self.rect = self.image.get_rect()
         self.rect.x = width
@@ -66,6 +68,12 @@ class Scoreboard:
     def draw(self, screen, score):
         score_text = self.font.render(f"Score: {score}", True, BLACK)
         screen.blit(score_text, (10, 10))
+
+# 이미지의 상대경로를 가져옵니다.
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath('.'), relative_path)
 
 # 게임의 시작 화면을 표시합니다.
 def start_screen():
