@@ -3,6 +3,9 @@ import random
 import os
 import sys
 
+__author__ = "MARU"
+__version__ = "0.0.1"
+
 # 게임 화면 설정
 WIDTH, HEIGHT = 800, 300
 WHITE = (255, 255, 255)
@@ -79,6 +82,7 @@ def resource_path(relative_path):
 def start_screen():
     button_font = pygame.font.Font(None, 36)
     title_font = pygame.font.Font(None, 60)
+    info_font = pygame.font.Font(None, 24)
     button_color = (100, 100, 255)
     button_hover_color = (150, 150, 255)
 
@@ -89,9 +93,14 @@ def start_screen():
     button_rect = button.get_rect(center=(WIDTH // 2, HEIGHT // 1.5))
     button_bg_color = button_color
 
+    author_text = info_font.render(f"Developer: {__author__}", True, BLACK)
+    version_text = info_font.render(f"Version: {__version__}", True, BLACK)
+
     while True:
         screen.fill(WHITE)
         screen.blit(title, title_rect)
+        screen.blit(author_text, (10, HEIGHT - 50))
+        screen.blit(version_text, (10, HEIGHT - 30))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -199,6 +208,8 @@ def game_loop():
     pygame.quit()
 
 if __name__ == "__main__":
+    print(f"Developer: {__author__}")
+    print(f"Version: {__version__}")
     start_game = start_screen()
     if start_game:
         while True:
